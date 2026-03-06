@@ -1,55 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pomodoro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Coffee</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f4e7d3;
+        }
+
+        /* แก้วกาแฟ */
+        .coffee {
+            width: 220px;
+            height: 160px;
+            background: #6f4e37;
+            margin: 40px auto;
+            border-radius: 0 0 100px 100px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        /* หูแก้ว */
+        .coffee::after {
+            content: "";
+            position: absolute;
+            right: -50px;
+            top: 30px;
+            width: 60px;
+            height: 80px;
+            border: 12px solid #6f4e37;
+            border-radius: 50%;
+        }
+
+        /* ฟองกาแฟ */
+        .foam {
+            width: 220px;
+            height: 30px;
+            background: #fff;
+            border-radius: 20px;
+            margin: auto;
+        }
+
+        input {
+            padding: 8px;
+            width: 80px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
 
-<h1>Pomodoro</h1>
+    <h1>☕ Pomodoro Coffee</h1>
 
-<h2>set time (min)</h2>
-<input type="number" id="timer">
+    <div class="foam"></div>
 
-<button onclick="startTimer()">submit</button>
+    <div class="coffee">
+        <span id="display">00:00</span>
+    </div>
 
-<h2 id="display">00:00</h2>
-<audio id="alarm" src="ack.mp3"></audio>
+    <h3>Set Time (minutes)</h3>
 
-<script>
+    <input type="number" id="timer" value="25">
 
-let countdown;
+    <button onclick="startTimer()">Start</button>
 
-function startTimer(){
+    <audio id="alarm" src="ack.mp3"></audio>
 
-    let minutes = document.getElementById("timer").value;
-    let time = minutes * 60;
+    <script>
 
-    clearInterval(countdown);
+        let countdown;
 
-    countdown = setInterval(()=>{
+        function startTimer() {
 
-        let min = Math.floor(time / 60);
-        let sec = time % 60;
+            let minutes = document.getElementById("timer").value;
+            let time = minutes * 60;
 
-        document.getElementById("display").textContent =
-        min + ":" + sec.toString().padStart(2,"0");
-
-        time--;
-
-        if(time < 0){
             clearInterval(countdown);
-            document.getElementById("display").textContent = "หมดเวลา";
-            document.getElementById("alarm").play();
+
+            countdown = setInterval(() => {
+
+                let min = Math.floor(time / 60);
+                let sec = time % 60;
+
+                document.getElementById("display").textContent =
+                    min + ":" + sec.toString().padStart(2, "0");
+
+                time--;
+
+                if (time < 0) {
+                    clearInterval(countdown);
+                    document.getElementById("display").textContent = "หมดเวลา ☕";
+                    document.getElementById("alarm").play();
+                }
+
+            }, 1000);
+
         }
 
-    },1000);
-
-}
-
-</script>
+    </script>
 
 </body>
+
 </html>
