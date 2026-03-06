@@ -1,11 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pomodoro</title>
 </head>
+
 <body>
-    <h1>Pomodoro</h1>
+
+<h1>Pomodoro</h1>
+
+<h2>set time (min)</h2>
+<input type="number" id="timer">
+
+<button onclick="startTimer()">submit</button>
+
+<h2 id="display">00:00</h2>
+<audio id="alarm" src="ack.mp3"></audio>
+
+<script>
+
+let countdown;
+
+function startTimer(){
+
+    let minutes = document.getElementById("timer").value;
+    let time = minutes * 60;
+
+    clearInterval(countdown);
+
+    countdown = setInterval(()=>{
+
+        let min = Math.floor(time / 60);
+        let sec = time % 60;
+
+        document.getElementById("display").textContent =
+        min + ":" + sec.toString().padStart(2,"0");
+
+        time--;
+
+        if(time < 0){
+            clearInterval(countdown);
+            document.getElementById("display").textContent = "หมดเวลา";
+            document.getElementById("alarm").play();
+        }
+
+    },1000);
+
+}
+
+</script>
+
 </body>
 </html>
