@@ -1,20 +1,4 @@
-/* =========================================================
-   Pomodoro Coffee — script.js
-   Vanilla JS only. No frameworks, no backend.
-   Sections:
-   1. Constants & helpers
-   2. Settings (load / save / apply)
-   3. State
-   4. DOM cache
-   5. Rendering (time, cup, status, cycle, presets, tabs)
-   6. Timer engine (timestamp-based, drift free)
-   7. Actions (start/pause/resume/reset/switch mode)
-   8. Sound engine (Web Audio API)
-   9. Settings modal wiring
-   10. Presets & custom time wiring
-   11. Keyboard shortcuts
-   12. Init
-   ========================================================= */
+
 
 (function () {
   'use strict';

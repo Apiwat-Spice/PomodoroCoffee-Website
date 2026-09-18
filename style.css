@@ -1,11 +1,4 @@
-/* =========================================================
-   Pomodoro Coffee — style.css
-   Theme tokens live on [data-theme] so switching theme only
-   means swapping one attribute on <html>. Everything else
-   reads from the CSS custom properties below.
-   ========================================================= */
 
-/* ---------- Theme: Coffee Light (default) ---------- */
 :root,
 [data-theme="light"] {
   --bg: #f5ebdd;
