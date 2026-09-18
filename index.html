@@ -1,120 +1,233 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="th" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro Coffee</title>
-
-    <style>
-        body {
-            font-family: Arial;
-            text-align: center;
-            background: #f4e7d3;
-        }
-
-        /* แก้วกาแฟ */
-        .coffee {
-            width: 220px;
-            height: 160px;
-            background: #6f4e37;
-            margin: 40px auto;
-            border-radius: 0 0 100px 100px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 30px;
-            font-weight: bold;
-        }
-
-        /* หูแก้ว */
-        .coffee::after {
-            content: "";
-            position: absolute;
-            right: -50px;
-            top: 30px;
-            width: 60px;
-            height: 80px;
-            border: 12px solid #6f4e37;
-            border-radius: 50%;
-        }
-
-        /* ฟองกาแฟ */
-        .foam {
-            width: 220px;
-            height: 30px;
-            background: #fff;
-            border-radius: 20px;
-            margin: auto;
-        }
-
-        input {
-            padding: 8px;
-            width: 80px;
-            text-align: center;
-        }
-
-        button {
-            padding: 10px 20px;
-            margin-left: 10px;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pomodoro Coffee</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+<!-- Google Fonts: Fraunces (display/serif for the timer + headings) and Manrope (UI sans) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <h1>☕ Pomodoro Coffee</h1>
+  <!-- Live region for screen readers: announces status + time changes -->
+  <div id="srAnnouncer" class="sr-only" aria-live="polite"></div>
 
-    <div class="foam"></div>
+  <div class="app-shell">
 
-    <div class="coffee">
-        <span id="display">00:00</span>
+    <!-- ============ HEADER ============ -->
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">☕</span>
+        <span class="brand-name">Pomodoro Coffee</span>
+      </div>
+      <div class="header-actions">
+        <button type="button" id="themeBtn" class="icon-btn" aria-label="สลับธีมสี (Cycle theme)" title="สลับธีม">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.35-.02-.7-.05-1.05A5.5 5.5 0 0 1 13.05 3.05 8.98 8.98 0 0 0 12 3Zm-5 9.5A1.5 1.5 0 1 1 7 9a1.5 1.5 0 0 1 0 3.5Zm3-5A1.25 1.25 0 1 1 10 6a1.25 1.25 0 0 1 0 1.5Zm5.5 8A1.5 1.5 0 1 1 17 12a1.5 1.5 0 0 1-1.5 1.5Zm-1-6.5A1.25 1.25 0 1 1 14.5 6a1.25 1.25 0 0 1 0-1"/></svg>
+        </button>
+        <button type="button" id="settingsBtn" class="icon-btn" aria-label="เปิดการตั้งค่า (Settings)" title="ตั้งค่า" aria-haspopup="dialog">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94a7.14 7.14 0 0 0 .06-.94 7.14 7.14 0 0 0-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.3 7.3 0 0 0-1.63-.94L14.4 2.8a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.52c-.59.24-1.13.56-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.66 8.84a.5.5 0 0 0 .12.64L4.8 11.06a7.14 7.14 0 0 0 0 1.88l-2.02 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.14.24.42.32.6.22l2.4-.96c.5.38 1.03.7 1.62.94l.36 2.52c.05.24.26.42.5.42h3.84c.24 0 .45-.18.5-.42l.36-2.52c.59-.24 1.13-.56 1.63-.94l2.39.96c.24.1.5 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64ZM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7Z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ============ MAIN ============ -->
+    <main class="app-main">
+
+      <!-- Pomodoro mode switcher -->
+      <div class="mode-row" role="tablist" aria-label="โหมด Pomodoro">
+        <button type="button" class="mode-tab" data-mode="focus" role="tab" aria-selected="true">Focus</button>
+        <button type="button" class="mode-tab" data-mode="short" role="tab" aria-selected="false">Short Break</button>
+        <button type="button" class="mode-tab" data-mode="long" role="tab" aria-selected="false">Long Break</button>
+      </div>
+
+      <p class="cycle-count" id="cycleCount">Pomodoro 1 / 4</p>
+
+      <!-- Time display -->
+      <div class="time-display" id="timeDisplay" aria-hidden="true">25:00</div>
+
+      <!-- ===== Coffee cup visual ===== -->
+      <div class="cup-stage">
+        <svg class="cup-svg" id="cupSvg" viewBox="0 0 300 360" role="img" aria-label="แก้วกาแฟแสดงความคืบหน้าของเวลา">
+          <defs>
+            <linearGradient id="liquidGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--coffee-liquid-2)"/>
+              <stop offset="100%" stop-color="var(--coffee-liquid-1)"/>
+            </linearGradient>
+            <linearGradient id="cupBodyGradient" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="var(--cup-body)"/>
+              <stop offset="100%" stop-color="var(--cup-rim)"/>
+            </linearGradient>
+            <clipPath id="cupClip">
+              <rect x="78" y="98" width="144" height="190" rx="16"/>
+            </clipPath>
+          </defs>
+
+          <!-- saucer -->
+          <ellipse class="cup-saucer" cx="150" cy="322" rx="92" ry="14"/>
+
+          <!-- steam -->
+          <g class="steam-group" id="steamGroup" aria-hidden="true">
+            <path class="steam-path steam-1" d="M120,80 C110,65 130,55 120,40 C110,25 130,15 122,4"/>
+            <path class="steam-path steam-2" d="M150,80 C140,65 160,55 150,40 C140,25 160,15 152,4"/>
+            <path class="steam-path steam-3" d="M180,80 C170,65 190,55 180,40 C170,25 190,15 182,4"/>
+          </g>
+
+          <!-- cup body outline -->
+          <rect class="cup-body" x="70" y="90" width="160" height="206" rx="22"/>
+
+          <!-- liquid, clipped to cup interior -->
+          <g clip-path="url(#cupClip)">
+            <rect id="liquidFill" class="liquid-fill" x="78" y="288" width="144" height="0" fill="url(#liquidGradient)"/>
+            <path id="liquidWave" class="liquid-wave" d="M78,288 q18,-6 36,0 t36,0 t36,0 t36,0 v20 h-144 z" fill="var(--coffee-liquid-2)"/>
+            <circle class="bubble bubble-1" cx="110" cy="270" r="3"/>
+            <circle class="bubble bubble-2" cx="150" cy="280" r="2.4"/>
+            <circle class="bubble bubble-3" cx="185" cy="265" r="2.8"/>
+          </g>
+
+          <!-- rim highlight (drawn above liquid so cup mouth looks correct) -->
+          <rect class="cup-rim-highlight" x="70" y="90" width="160" height="18" rx="9"/>
+
+          <!-- handle -->
+          <path class="cup-handle" d="M228,140 C270,140 270,220 228,222"/>
+        </svg>
+
+        <p class="cup-status" id="cupStatus">Ready</p>
+      </div>
+
+      <!-- Presets -->
+      <section class="presets" aria-label="เลือกเวลาสำเร็จรูป">
+        <div class="preset-row" id="presetRow">
+          <button type="button" class="preset-btn" data-minutes="5">5 min</button>
+          <button type="button" class="preset-btn" data-minutes="15">15 min</button>
+          <button type="button" class="preset-btn active" data-minutes="25">25 min</button>
+          <button type="button" class="preset-btn" data-minutes="30">30 min</button>
+          <button type="button" class="preset-btn" data-minutes="45">45 min</button>
+          <button type="button" class="preset-btn" data-minutes="60">60 min</button>
+          <button type="button" class="preset-btn" id="customPresetBtn" data-minutes="custom">Custom</button>
+        </div>
+
+        <div class="custom-time" id="customTimeRow" hidden>
+          <label class="custom-field">
+            <span>Hours</span>
+            <input type="number" id="customHours" min="0" max="23" value="0" inputmode="numeric">
+          </label>
+          <label class="custom-field">
+            <span>Minutes</span>
+            <input type="number" id="customMinutes" min="0" max="59" value="25" inputmode="numeric">
+          </label>
+          <label class="custom-field">
+            <span>Seconds</span>
+            <input type="number" id="customSeconds" min="0" max="59" value="0" inputmode="numeric">
+          </label>
+          <button type="button" id="applyCustomTime" class="btn btn-small">Apply</button>
+        </div>
+      </section>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button type="button" id="startBtn" class="btn btn-primary">Start</button>
+        <button type="button" id="pauseBtn" class="btn btn-secondary" disabled>Pause</button>
+        <button type="button" id="resetBtn" class="btn btn-secondary">Reset</button>
+      </div>
+
+      <p class="kbd-hint">Space = Start/Pause &nbsp;•&nbsp; R = Reset &nbsp;•&nbsp; S = Settings</p>
+    </main>
+  </div>
+
+  <!-- ============ SETTINGS MODAL ============ -->
+  <div class="modal-overlay" id="modalOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" id="settingsModal">
+      <div class="modal-header">
+        <h2 id="modalTitle">Settings</h2>
+        <button type="button" class="icon-btn" id="modalCloseBtn" aria-label="ปิดหน้าต่างตั้งค่า">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.3 19.7l-1.41-1.42L8.59 12 2.3 5.71 3.71 4.3 10 10.59 16.3 4.3z"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <section class="settings-section">
+          <h3>Timer</h3>
+          <label class="settings-row">
+            <span>Focus Duration (min)</span>
+            <input type="number" id="setFocus" min="1" max="180" value="25">
+          </label>
+          <label class="settings-row">
+            <span>Short Break (min)</span>
+            <input type="number" id="setShort" min="1" max="60" value="5">
+          </label>
+          <label class="settings-row">
+            <span>Long Break (min)</span>
+            <input type="number" id="setLong" min="1" max="90" value="15">
+          </label>
+        </section>
+
+        <section class="settings-section">
+          <h3>Sound</h3>
+          <label class="settings-row">
+            <span>Alert Sound</span>
+            <select id="setSound">
+              <option value="classicBell">Classic Bell</option>
+              <option value="coffeeBell">Coffee Bell</option>
+              <option value="softBell">Soft Bell</option>
+              <option value="digitalBeep">Digital Beep</option>
+              <option value="gentleChime">Gentle Chime</option>
+              <option value="none">None</option>
+            </select>
+          </label>
+          <label class="settings-row">
+            <span>Volume</span>
+            <input type="range" id="setVolume" min="0" max="100" value="60">
+          </label>
+          <div class="settings-row">
+            <span></span>
+            <button type="button" id="testSoundBtn" class="btn btn-small">Test Sound</button>
+          </div>
+        </section>
+
+        <section class="settings-section">
+          <h3>Theme</h3>
+          <label class="settings-row">
+            <span>Theme</span>
+            <select id="setTheme">
+              <option value="light">Coffee Light</option>
+              <option value="dark">Coffee Dark</option>
+              <option value="latte">Latte</option>
+              <option value="matcha">Matcha</option>
+              <option value="blueberry">Blueberry</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="settings-section">
+          <h3>Other</h3>
+          <label class="settings-row settings-row-checkbox">
+            <span>Auto Start next session</span>
+            <input type="checkbox" id="setAutoStart">
+          </label>
+          <label class="settings-row settings-row-checkbox">
+            <span>Enable Animation</span>
+            <input type="checkbox" id="setEnableAnimation" checked>
+          </label>
+          <label class="settings-row settings-row-checkbox">
+            <span>Reduced Motion</span>
+            <input type="checkbox" id="setReducedMotion">
+          </label>
+        </section>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancelSettingsBtn">Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveSettingsBtn">Save</button>
+      </div>
     </div>
+  </div>
 
-    <h3>Set Time (minutes)</h3>
-
-    <input type="number" id="timer" value="25">
-
-    <button onclick="startTimer()">Start</button>
-
-    <audio id="alarm" src="ack.mp3"></audio>
-
-    <script>
-
-        let countdown;
-
-        function startTimer() {
-
-            let minutes = document.getElementById("timer").value;
-            let time = minutes * 60;
-
-            clearInterval(countdown);
-
-            countdown = setInterval(() => {
-
-                let min = Math.floor(time / 60);
-                let sec = time % 60;
-
-                document.getElementById("display").textContent =
-                    min + ":" + sec.toString().padStart(2, "0");
-
-                time--;
-
-                if (time < 0) {
-                    clearInterval(countdown);
-                    document.getElementById("display").textContent = "หมดเวลา ☕";
-                    document.getElementById("alarm").play();
-                }
-
-            }, 1000);
-
-        }
-
-    </script>
-
+  <script src="script.js"></script>
 </body>
-
 </html>
